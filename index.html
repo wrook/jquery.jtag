@@ -1,0 +1,230 @@
+<!doctype html public '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+	<head>
+		<script src="jquery.js"></script>
+		<script src="jquery.jtag.js"></script>
+<script>
+$(document).ready(function(){
+
+	options = {
+		tagEditTemplate: function(tag){
+			return $("<li class='pill'><span><a class='jTagLabel' alt='" + tag + "'><nobr>" + tag + "</nobr></a></span><div><a class='jTagRemove' href='#'></a></div></li>");
+		},
+		tagViewTemplate: function(tag){
+			return $("<li><a class='jTagLabel' href='#" + tag + "' alt='" + tag + "'><nobr>" + tag + "</nobr></a></li>");
+		},
+		onRemoveTag: function(label, callback) {
+			$.getJSON("ajax-delete-jsonResult.json", callback);
+		},
+		onRemoveTagFailed: function(data, label) {
+			alert("Failed removing this label: " + label);
+		},
+		onAddTags: function(tags, callback) {
+			$.getJSON("ajax-add-jsonResult.json", callback);
+		},
+		onAddTagsFailed: function(data, tags) {
+			alert("Failed adding some tags: " + tags);
+		}
+	};
+
+	$(".jTag").jTag();
+	$("#wardrobeTags").jTag(options);
+})
+</script>
+<style>
+
+h1 {
+	clear:left;
+	font-size: 1.35em;
+}
+h2 {
+	clear:left;
+	font-size: 1.2em;
+	color: #999;
+}
+
+body {
+	font-family: arial, "sans-serif";
+	font-size: 0.75em;
+}
+
+ul {
+	position: relative;
+	margin: 0px;
+	padding: 0px 0px 0px 15px;
+}
+
+.column {
+	width:260px;
+	float: left;
+	padding: 10px 40px;
+	border-left: 3px solid #eee;
+}
+.column.first {
+	border-left: none;
+}
+
+ul.pills {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	height: 1px;
+}
+ul li.lastItem {
+	clear: both;
+	height: 1px;
+	background: #fff;
+	display: block !important;
+}
+
+ul.pills li {
+	position: relative;
+	font-size: 11px;
+	float: left;
+	line-height: 1.5em;
+	padding: 0px 10px 0px 0px;
+}
+
+ul.pills li.pill {
+	font-size: 10px;
+	height: 17px;
+	background: url(images/pillButton.png) top left no-repeat;
+	padding: 0px 24px 0px 10px;
+	margin: 0px 5px 2px 0px;
+}
+ul.pills li.pill .jTagLabel {
+	position: relative;
+	top: 1px;
+}
+ul.pills li.pill .jTagRemove {
+	display: block;
+	position: absolute;
+	top: 0px;
+	right: -1px;
+	width: 20px;
+	height: 17px;
+	z-index: 1000;
+	background: url(images/pillButton.png) top right no-repeat;
+}
+
+.jTagInput {
+	position: relative;
+	margin: 10px 0px 0px 0px;
+}
+
+.clearfix {
+	clear: left;
+	height: 1px;
+}
+
+pre {
+	font-family: tahoma;
+	border: 1px dashed #999;
+	padding: 10px;
+	background: #F8F8F8;
+}
+
+</style>
+	</head>
+	<body>
+		<h1>jTag: tagging user interface</h1>
+		<p>
+			The jTag jQuery plugin, creates the necessary user interfaces and interactions to add and remove tags (aka Keywords, Labels) in a user friendly way.
+		</p>
+		<p>
+			Simple create an html fragment containing list of items (ul and li tags) and activate the plugins on tis fragment of html. Each part of the plugin can be customized and the ajax interaction with the server is easy to setup and can be replaced by any other behavior wanted.
+		</p>
+		<div class="column first">
+			<h2>Sample 1</h2>
+			<p>
+				<div class="jTag"  id="fruitbowlTags">
+					<ul>
+						<li><a alt="apple" href="#">Apple</a></li>
+						<li><a alt="oranges" href="#">Oranges</a></li>
+						<li><a alt="banana" href="#">Banana</a></li>
+						<li><a alt="mango" href="#">Mango</a></li>
+						<li><a alt="raisins" href="#">Raisins</a></li>
+						<li><a alt="kevin bacon" href="#">Kevin Bacon</a></li>
+					</ul>
+					<div class="clearfix"></div>
+					<div class="jTagInput"></div>
+				</div>
+			</p>
+		</div>
+		<div class="column">
+			<h2>Sample 2 (empty)</h2>
+			<p>
+				<div class="jTag" id="whateverTags">
+					<ul>
+					</ul>
+					<div class="clearfix"></div>
+					<div class="jTagInput"></div>
+				</div>
+			</p>
+		</div>
+		<div class="column">
+			<h2>Sample 3</h2>
+			<p>
+				<strong>Note:</strong> This sampe goest through a fake Ajax call to simulate a backend call. It will always add the same three tags: <em>"tag1", "tag2, "akouna matata!"</em>
+			</p>
+			<p>
+				<div id="wardrobeTags">
+					<ul class="pills">
+						<li><a alt="socks" href="#">Socks</a></li>
+						<li><a alt="underpants" href="#">Underpants</a></li>
+						<li><a alt="pants" href="#">Pants</a></li>
+						<li><a alt="shirt" href="#">Shirt</a></li>
+						<li><a alt="hat" href="#">Hat</a></li>
+						<li><a alt="prostetic arm" href="#">Prosthetic arm</a></li>
+						<li><a alt="hamster" href="#">Hamster</a></li>
+						<li><a alt="duct tape" href="#">Duct tape</a></li>
+					</ul>
+					<div class="clearfix"></div>
+					<div class="jTagInput"></div>
+				</div>
+			</p>
+		</div>
+		<h1>HTML Fragment sample</h1>
+		<p>Note that the "alt" attribute is used to keep track of the actual data which will be sent to the server.</p>
+		<pre>
+&lt;div class=&quot;jTag&quot;  id=&quot;fruitbowlTags&quot;&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a alt=&quot;apple&quot; href=&quot;#&quot;&gt;Apple&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a alt=&quot;oranges&quot; href=&quot;#&quot;&gt;Oranges&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a alt=&quot;banana&quot; href=&quot;#&quot;&gt;Banana&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a alt=&quot;mango&quot; href=&quot;#&quot;&gt;Mango&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a alt=&quot;raisins&quot; href=&quot;#&quot;&gt;Raisins&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a alt=&quot;kevin bacon&quot; href=&quot;#&quot;&gt;Kevin Bacon&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;div class=&quot;clearfix&quot;&gt;&lt;/div&gt;
+	&lt;div class=&quot;jTagInput&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+		</pre>
+		<h1>Plugin options and setup</h1>
+		<p>
+			Some more options can be configured. Refer to the "defaults" block found at the botttom of the javascript source code.
+		</p>
+		<pre>
+options = {
+	tagEditTemplate: function(tag){
+		return $(&quot;&lt;li class=&#039;pill&#039;&gt;&lt;span&gt;&lt;a class=&#039;jTagLabel&#039; alt=&#039;&quot; + tag + &quot;&#039;&gt;&quot; + tag + &quot;&lt;/a&gt;&lt;/span&gt;&lt;a href=&#039;#&#039; class=&#039;jTagRemove&#039;&gt;&lt;/a&gt;&lt;/li&gt;&quot;);
+	},
+	onRemoveTag: function(label, callback) {
+		$.getJSON(&quot;ajax-delete-jsonResult.json&quot;, callback);
+	},
+	onRemoveTagFailed: function(data, label) {
+		alert(&quot;Failed removing this label: &quot; + label);
+	},
+	onAddTags: function(tags, callback) {
+		$.getJSON(&quot;ajax-add-jsonResult.json&quot;, callback);
+	},
+	onAddTagsFailed: function(data, tags) {
+		alert(&quot;Failed adding some tags: &quot; + tags);
+	}
+};
+
+$(&quot;.jTag&quot;).jTag();
+		</pre>
+
+	</body>
+</htlm>
